@@ -194,6 +194,8 @@ impl Game {
         // There are two diagonals on the board. Their positions are as follows:
         // 1. (0, 0), (1, 1), (2, 2)
         // 2. (0, 2), (1, 1), (2, 0)
+        // Due to the possibility of being on (1, 1), we might be on both diagonals. We will check
+        // both diagonals separately.
         // Notice that on a 3x3 board, if row == col, we are on the first diagonal
         // and if (rows - row - 1) == col, we are on the second diagonal.
         // If we are on neither diagonal, we can just use an array of None's so that it definitely
@@ -201,19 +203,24 @@ impl Game {
 
         // Here, we see that if statements can be used as expressions just like match statements.
         // That means that we can assign this variable to the result of the if statement.
-        let tiles_diagonal = if row == col {
+        let tiles_diagonal_1 = if row == col {
             // Once again, we'll do the simplest thing and just use an array.
 
             // Diagonal 1
             [self.tiles[0][0], self.tiles[1][1], self.tiles[2][2]]
         }
-        else if (rows - row - 1) == col {
+        else {
+            // This will never produce a winner, so it is suitable to use for the case where the
+            // last move isn't on diagonal 1 anyway.
+            [None, None, None]
+        };
+
+        let tiles_diagonal_2 = if (rows - row - 1) == col {
             // Diagonal 2
             [self.tiles[0][2], self.tiles[1][1], self.tiles[2][0]]
         }
         else {
-            // This will never produce a winner, so it is suitable to use for the case where the
-            // last move isn't on a diagonal anyway
+            // Our last move isn't on diagonal 2.
             [None, None, None]
         };
 
@@ -261,7 +268,8 @@ impl Game {
             // and the code is only run in case a previous winner was *not* found.
             .or_else(|| check_winner(&tiles_row))
             .or_else(|| check_winner(&tiles_col))
-            .or_else(|| check_winner(&tiles_diagonal));
+            .or_else(|| check_winner(&tiles_diagonal_1))
+            .or_else(|| check_winner(&tiles_diagonal_2));
 
         // The final case is when the board has filled up. Here, for the first time, we'll be a
         // bit fancy and use the Iterator trait. For more info, see the book:
