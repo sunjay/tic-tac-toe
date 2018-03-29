@@ -12,6 +12,18 @@ it.
 
 Start reading from either `src/main.rs` or `src/game.rs`.
 
+> This project was originally created for a talk:
+["An Introduction to Rust"](https://slides.com/sunjay/intro-to-rust/)
+
+## The Game
+
+Tic-Tac-Toe is played on a 3x3 grid. You take turns placing pieces and attempt
+to get three in a row horizontally, vertically, or diagonally.
+
+Here's what it looks like when it is running:
+
+![tic-tac-toe game](tic-tac-toe.gif)
+
 ## Build Instructions
 
 1. [Install Rust](https://rustup.rs/)
